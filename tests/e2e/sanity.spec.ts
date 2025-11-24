@@ -1,26 +1,21 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Critical Sanity Check', () => {
-  
-  test('App renders header and navigates', async ({ page }) => {
+test.describe('TensorField Studio Sanity', () => {
+  test('App loads and renders default sandbox mode', async ({ page }) => {
     await page.goto('/');
 
-    // 1. Wait for Root
-    const root = page.locator('#root');
-    await expect(root).toBeVisible({ timeout: 10000 });
+    // 1. Check Main Title/Nav
+    await expect(page.getByText('TensorFieldStudio')).toBeVisible({ timeout: 10000 });
 
-    // 2. Check for the Force-Visible Header
-    await expect(page.getByText('UI Loaded')).toBeVisible();
+    // 2. Check Default View (Tensor Sandbox)
+    await expect(page.getByText('Tensor Components')).toBeVisible();
 
-    // 3. Verify Navigation Bar
-    const nav = page.locator('nav');
-    await expect(nav).toBeVisible();
-    
-    // 4. Default Mode: Tensor Sandbox
-    await expect(page.locator('text=Tensor Components')).toBeVisible();
+    // 3. Verify Canvas exists
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeAttached();
 
-    // 5. Navigate to Mechanics
-    await page.click('text=Mechanics Mode');
-    await expect(page.locator('text=Cantilever Beam')).toBeVisible();
+    // 4. Navigation works
+    await page.getByRole('button', { name: 'Mechanics Mode' }).click();
+    await expect(page.getByText('Cantilever Beam')).toBeVisible();
   });
 });
