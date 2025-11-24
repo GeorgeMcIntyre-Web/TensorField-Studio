@@ -15,19 +15,25 @@
         background-color: #020617; /* slate-950 */
         color: #f1f5f9; /* slate-100 */
       }
+      canvas {
+        touch-action: none;
+        outline: none;
+      }
     </style>
     <script>
       window.onerror = function(message, source, lineno, colno, error) {
+        console.error("Global Error Caught:", message, error);
         const root = document.getElementById('root');
-        root.innerHTML = `
-          <div style="padding: 20px; color: #ff6b6b; font-family: monospace; background: #2d0000; height: 100%;">
-            <h3>Application Error</h3>
-            <p><strong>Message:</strong> ${message}</p>
-            <p><strong>Source:</strong> ${source}:${lineno}:${colno}</p>
-            <pre style="white-space: pre-wrap; opacity: 0.8;">${error ? error.stack : ''}</pre>
-          </div>
-        `;
-        console.error(error);
+        if (root) {
+           root.innerHTML = `
+            <div style="padding: 20px; color: #ff6b6b; font-family: monospace; background: #2d0000; height: 100%; overflow: auto;">
+              <h3>Application Error</h3>
+              <p><strong>Message:</strong> ${message}</p>
+              <p><strong>Location:</strong> ${source}:${lineno}:${colno}</p>
+              <pre style="white-space: pre-wrap; opacity: 0.8; font-size: 12px;">${error ? error.stack : 'No stack trace'}</pre>
+            </div>
+          `;
+        }
       };
     </script>
     <script type="importmap">
@@ -43,6 +49,7 @@
     "@babylonjs/core": "https://aistudiocdn.com/@babylonjs/core@^7.0.0",
     "vitest": "https://aistudiocdn.com/vitest@^1.2.1",
     "clsx": "https://aistudiocdn.com/clsx@^2.1.0",
+    "tailwind-merge": "https://aistudiocdn.com/tailwind-merge@^2.2.0",
     "@playwright/test": "https://aistudiocdn.com/@playwright/test@^1.41.0",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.300.0",
     "fast-check": "https://aistudiocdn.com/fast-check@^3.14.0",
@@ -53,8 +60,9 @@
   </head>
   <body>
     <div id="root">
-      <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: #94a3b8; font-family: monospace;">
-        Loading TensorField Studio...
+      <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: #94a3b8; font-family: monospace; flex-direction: column; gap: 1rem;">
+        <div>Loading TensorField Studio...</div>
+        <div style="font-size: 0.8rem; color: #475569;">Initializing Runtime</div>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>

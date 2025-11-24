@@ -4,8 +4,8 @@ test.describe('TensorField Studio Sanity', () => {
   test('App loads and renders default sandbox mode', async ({ page }) => {
     await page.goto('/');
 
-    // 1. Check Main Title/Nav
-    await expect(page.getByText('TensorFieldStudio')).toBeVisible({ timeout: 10000 });
+    // 1. Check Main Title/Nav (Note: Title is TensorFieldStudio, separate span in UI)
+    await expect(page.locator('nav')).toContainText('TensorField');
 
     // 2. Check Default View (Tensor Sandbox)
     await expect(page.getByText('Tensor Components')).toBeVisible();

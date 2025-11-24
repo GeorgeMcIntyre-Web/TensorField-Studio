@@ -3,6 +3,14 @@ import { AppMode, Tensor3, MechanicsExample, AppSnapshot } from '../types';
 import { createTensorFromComponents } from '../math/tensors';
 import { DEFAULT_TENSOR_COMPONENTS } from '../constants';
 
+// Simple ID generator fallback if crypto is unavailable (e.g. non-HTTPS context)
+const generateId = () => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+
 interface AppState {
   mode: AppMode;
   setMode: (mode: AppMode) => void;
@@ -84,7 +92,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   saveSnapshot: (label) => {
     const state = get();
     const snap: AppSnapshot = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         label: label || `Snapshot ${state.snapshots.length + 1}`,
         date: Date.now(),
         mode: state.mode,
@@ -142,7 +150,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           }
 
           // Generate new ID to avoid collisions on import
-          const newSnap = { ...parsed, id: crypto.randomUUID(), label: parsed.label + ' (Imported)' };
+          const newSnap = { ...parsed, id: generateId(), label: parsed.label + ' (Imported)' };
           
           set((state) => ({ snapshots: [...state.snapshots, newSnap] }));
           return true;
