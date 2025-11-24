@@ -1,0 +1,5 @@
+{
+  "name": "TensorField Studio",
+  "description": "A web-based interactive playground for solid mechanics and relativity tensor visualization using React and Babylon.js.",
+  "requestFramePermissions": []
+}
